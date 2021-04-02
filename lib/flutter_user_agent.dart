@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 class FlutterUserAgent {
   static const MethodChannel _channel = MethodChannel('flutter_user_agent');
 
-  static Map<String, dynamic> _properties;
+  static late Map<String, dynamic> _properties;
 
   /// Initialize the module.
   ///
@@ -14,7 +14,7 @@ class FlutterUserAgent {
   /// Set [force] to true if you want to refetch the user agent properties from
   /// the native platform.
   static Future init({force: false}) async {
-    if (_properties == null || force) {
+    if (force) {
       _properties =
           Map.unmodifiable(await _channel.invokeMethod('getProperties'));
     }
@@ -23,7 +23,7 @@ class FlutterUserAgent {
   /// Release all the user agent properties statically cached.
   /// You can call this function when you no longer need to access the properties.
   static void release() {
-    _properties = null;
+    _properties.clear();
   }
 
   /// Returns the device's user agent.
